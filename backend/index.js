@@ -1,0 +1,14 @@
+const express = require("express");
+var cors = require("cors");
+
+const connection = require("./services/dbConnection.services");
+const userRouter = require("./router/user.router");
+
+const app = express();
+
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use("/user", userRouter);
+
+module.exports = app;
