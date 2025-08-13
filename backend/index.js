@@ -1,12 +1,12 @@
 const express = require("express");
 var cors = require("cors");
 
-const connection = require("./services/dbConnection.services");
-const userRoute = require("./router/user.route");
-const categoryRoute = require("./router/category.route");
-const productRoute = require("./router/product.route");
-const billRoute = require("./router/bill.route");
-const dashboardRoute = require("./router/dashboard.route");
+const connection = require("./services/dbConnection.service");
+const userRoute = require("./routes/user.route");
+const categoryRoute = require("./routes/category.route");
+const productRoute = require("./routes/product.route");
+const billRoute = require("./routes/bill.route");
+const dashboardRoute = require("./routes/dashboard.route");
 
 const app = express();
 

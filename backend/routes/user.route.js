@@ -10,12 +10,12 @@ var checkRole = require("../services/checkRole.service");
 
 router.post("/signup", (req, res) => {
   let user = req.body;
-  query = "SELECT email,paswword,role,status from user where email=?";
+  query = "SELECT email,password,role,status from user where email=?";
   connection.query(query, [user.email], (err, result) => {
     if (!err) {
       if (result.length <= 0) {
         query =
-          "insert into user(name,contactNumber,email,password,status,role) values(?,?,?,?,'false','user)";
+          "insert into user(name,contactNumber,email,password,status,role) values(?,?,?,?,'false','user')";
         connection.query(
           query,
           [user.name, user.contactNumber, user.email, user.password],
@@ -143,32 +143,33 @@ router.get(
   }
 );
 
-router.post("/changePassword", (req, res) => {});
-const user = req.body;
-const email = res.locals.email;
-var query = "select * from user where email=? and password password=?";
-connection.query(query, [email.user.oldPassword], (err, results) => {
-  if (!err) {
-    if (results.length <= 0) {
-      return res.status(400).json({ message: "Incorrect old password" });
-    } else if (results[0].password == user.oldPassword) {
-      query = "update user set password=? where email=?";
-      connection.query(query, [user.newPassword, email], (err, results) => {
-        if (!err) {
-          return res
-            .status(200)
-            .json({ message: "Password updated successfully." });
-        } else {
-          return results.status(500).json(err);
-        }
-      });
+router.post("/changePassword", (req, res) => {
+  const user = req.body;
+  const email = res.locals.email;
+  var query = "select * from user where email=? and password password=?";
+  connection.query(query, [email.user.oldPassword], (err, results) => {
+    if (!err) {
+      if (results.length <= 0) {
+        return res.status(400).json({ message: "Incorrect old password" });
+      } else if (results[0].password == user.oldPassword) {
+        query = "update user set password=? where email=?";
+        connection.query(query, [user.newPassword, email], (err, results) => {
+          if (!err) {
+            return res
+              .status(200)
+              .json({ message: "Password updated successfully." });
+          } else {
+            return results.status(500).json(err);
+          }
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Something went wrong. Please try again later." });
+      }
     } else {
-      return res
-        .status(400)
-        .json({ message: "Something went wrong. Please try again later." });
+      return res.status(500).json(err);
     }
-  } else {
-    return res.status(500).json(err);
-  }
+  });
 });
 module.exports = router;
